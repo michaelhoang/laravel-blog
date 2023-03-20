@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
+use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('post/{post:slug}', [PostController::class, 'show'])->name('post');
+
+Route::name('category.')->group(function () {
+    Route::get('category/{category:slug}/post/{post:slug}', [CategoryController::class, 'post'])->name('post');
+    Route::get('category/{category:slug}', [CategoryController::class, 'show'])->name('detail');
 });
+
+//Route::get('/category/{category:slug}', function (Category $category) {
+//    dd(request()->route()->named('category.detail'));
+//})->whereAlpha('category')->name('category.detail');
+
+//Route::get('/category/{category:slug}', [CategoryController::class, 'show']);
+//Route::get('/category', [CategoryController::class, 'index']);
+
+Route::get('/', [PostController::class, 'index']);
